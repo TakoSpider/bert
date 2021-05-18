@@ -615,6 +615,34 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 
     return (loss, per_example_loss, logits, probabilities)
 
+class MyTaskProcessor(DataProcessor):
+  """Processor for my task-news classification """
+  def __init__(self):
+    self.labels = ['news_entertainment', 'news_sports', 'news_finance', 'news_house', 'news_car', 'news_edu', 'news_tech', 'news_military', 'news_game', 'news_other']
+  def get_train_examples(self, data_dir):
+    return self._create_examples(
+      self._read_tsv(os.path.join(data_dir, 'train.tsv')), 'train')
+
+  def get_dev_examples(self, data_dir):
+    return self._create_examples(
+      self._read_tsv(os.path.join(data_dir, 'val.tsv')), 'val')
+
+  def get_test_examples(self, data_dir):
+    return self._create_examples(
+      self._read_tsv(os.path.join(data_dir, 'test.tsv')), 'test')
+
+  def get_labels(self):
+    return self.labels
+
+  def _create_examples(self, lines, set_type):
+    """create examples for the training and val sets"""
+    examples = []
+    for (i, line) in enumerate(lines):
+      guid = '%s-%s' %(set_type, i)
+      text_a = tokenization.convert_to_unicode(line[1])
+      label = tokenization.convert_to_unicode(line[0])
+      examples.append(InputExample(guid=guid, text_a=text_a, label=label))
+    return examples
 
 def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
                      num_train_steps, num_warmup_steps, use_tpu,
@@ -788,6 +816,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
+      "mytask": MyTaskProcessor,
   }
 
   tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
