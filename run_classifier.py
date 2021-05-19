@@ -618,7 +618,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 class MyTaskProcessor(DataProcessor):
   """Processor for my task-news classification """
   def __init__(self):
-    self.labels = ['news_entertainment', 'news_sports', 'news_finance', 'news_house', 'news_car', 'news_edu', 'news_tech', 'news_military', 'news_game', 'news_other']
+    self.labels = [ "财经", "房产", "教育", "科技", "军事", "汽车", "体育", "游戏", "娱乐", "其他"]
   def get_train_examples(self, data_dir):
     return self._create_examples(
       self._read_tsv(os.path.join(data_dir, 'train.tsv')), 'train')
@@ -715,6 +715,9 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         accuracy = tf.metrics.accuracy(
             labels=label_ids, predictions=predictions, weights=is_real_example)
         loss = tf.metrics.mean(values=per_example_loss, weights=is_real_example)
+        auc = tf.metrics.auc(labels=label_ids, predictions=predictions, weights=is_real_example)
+        precision=tf.metrics.precision(labels=label_ids, predictions=predictions, weights=is_real_example)
+        recall = tf.metrics.recall(labels=label_ids, predictions=predictions, weights=is_real_example)
         return {
             "eval_accuracy": accuracy,
             "eval_loss": loss,
@@ -907,6 +910,10 @@ def main(_):
         seq_length=FLAGS.max_seq_length,
         is_training=True,
         drop_remainder=True)
+    # 实时每迭代100步就输出一次loss
+    tensors_to_log = {"train loss": "loss/Mean:0"}
+    logging_hook = tf.train.LoggingTensorHook(
+            tensors=tensors_to_log, every_n_iter=100)
     estimator.train(input_fn=train_input_fn, max_steps=num_train_steps)
 
   if FLAGS.do_eval:
