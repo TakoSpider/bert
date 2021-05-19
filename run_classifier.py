@@ -639,9 +639,10 @@ class MyTaskProcessor(DataProcessor):
     examples = []
     for (i, line) in enumerate(lines):
       guid = '%s-%s' %(set_type, i)
-      text_a = tokenization.convert_to_unicode(line[1])
-      label = tokenization.convert_to_unicode(line[0])
-      examples.append(InputExample(guid=guid, text_a=text_a, label=label))
+      text_a = tokenization.convert_to_unicode(line[2])
+      label = tokenization.convert_to_unicode(line[1])
+      text_b = tokenization.convert_to_unicode(line[0])
+      examples.append(InputExample(guid=guid, text_a=text_a, label=label,text_b=text_b))
     return examples
 
 def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
