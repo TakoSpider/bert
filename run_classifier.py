@@ -377,7 +377,10 @@ class ColaProcessor(DataProcessor):
 def convert_single_example(ex_index, example, label_list, max_seq_length,
                            tokenizer):
   """Converts a single `InputExample` into a single `InputFeatures`."""
-
+  output_label2id_file = os.path.join(FLAGS.output_dir, "label2id.pkl")
+  if not os.path.exists(output_label2id_file):
+    with open(output_label2id_file,'wb') as w:
+      pickle.dump(label_map,w)
   if isinstance(example, PaddingInputExample):
     return InputFeatures(
         input_ids=[0] * max_seq_length,
@@ -639,6 +642,9 @@ class MyTaskProcessor(DataProcessor):
     examples = []
     for (i, line) in enumerate(lines):
       guid = '%s-%s' %(set_type, i)
+      tf.logging.info("text_a:{}".format(line[2]))
+      tf.logging.info("label:{}".format(line[1]))
+      tf.logging.info("text_b:{}".format(line[0]))
       text_a = tokenization.convert_to_unicode(line[2])
       label = tokenization.convert_to_unicode(line[1])
       text_b = tokenization.convert_to_unicode(line[0])

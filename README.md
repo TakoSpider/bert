@@ -1,3 +1,56 @@
+# BERT新闻分类
+## **介绍**
+> 赛题以新闻数据为赛题数据，整合划分出如下候选分类类别：财经、房产、教育、科技、军事、汽车、体育、游戏、娱乐和其他共十类的新闻文本数据。选手根据新闻标题和内容，进行分类。
+> 输入为新闻的标题和正文内容，输出为新闻的分类。
+## **仓库结构**
+### 简单的数据筛选: [ubuntu.py]
+### 训练与验证命令: [run.sh]
+### 代码的更改: [run_classifier.py]
+### 使用的数据: [data\\]\(使用的数据\),[data_full\\]\(全部数据\)
+### 部分日志: [log\\]
+### 验证的结果: [output\\eval_results.txt]
+### 部署使用的代码: [BERT-BiLSTM-CRF-NER]
+### 在线分类部署命令: [web.sh]
+### flask简单代码: [bert.py]
+[data_full\\]: ./data_full
+[BERT-BiLSTM-CRF-NER]: https://github.com/macanv/BERT-BiLSTM-CRF-NER
+[output\\eval_results.txt]: ./output/eval_results.txt
+[ubuntu.py]: ./ubuntu.py
+[run_classifier.py]: ./run_classifier.py
+[data\\]: ./data
+[log\\]: ./log
+[run.sh]: ./run.sh
+[web.sh]: ./web.sh
+[bert.py]: ./bert.py
+
+## **在效果测试**
+**参数**
+
+title: 要分类的标题
+
+**测试**
+
+测试连接(可直接于浏览器访问): http://47.100.51.234:5000/?title=%E4%B8%93%E8%AE%BF%E9%AC%BC%E6%B3%A3%E6%89%8B%E6%B8%B8%E5%88%B6%E4%BD%9C%E4%BA%BA%EF%BC%9A%E4%B8%8B%E6%AC%A1%E6%B5%8B%E8%AF%95%E8%A6%81%E5%A4%A7%E5%B9%85%E5%88%A0%E5%87%8F%E4%BB%98%E8%B4%B9%E7%B3%BB%E7%BB%9F
+```bash
+# bash
+curl --location --request GET 'http://47.100.51.234:5000?title=%E4%B8%93%E8%AE%BF%E9%AC%BC%E6%B3%A3%E6%89%8B%E6%B8%B8%E5%88%B6%E4%BD%9C%E4%BA%BA%EF%BC%9A%E4%B8%8B%E6%AC%A1%E6%B5%8B%E8%AF%95%E8%A6%81%E5%A4%A7%E5%B9%85%E5%88%A0%E5%87%8F%E4%BB%98%E8%B4%B9%E7%B3%BB%E7%BB%9F'
+```
+```cmd
+# cmd
+curl "http://47.100.51.234:5000/?title=^%^E4^%^B8^%^93^%^E8^%^AE^%^BF^%^E9^%^AC^%^BC^%^E6^%^B3^%^A3^%^E6^%^89^%^8B^%^E6^%^B8^%^B8^%^E5^%^88^%^B6^%^E4^%^BD^%^9C^%^E4^%^BA^%^BA^%^EF^%^BC^%^9A^%^E4^%^B8^%^8B^%^E6^%^AC^%^A1^%^E6^%^B5^%^8B^%^E8^%^AF^%^95^%^E8^%^A6^%^81^%^E5^%^A4^%^A7^%^E5^%^B9^%^85^%^E5^%^88^%^A0^%^E5^%^87^%^8F^%^E4^%^BB^%^98^%^E8^%^B4^%^B9^%^E7^%^B3^%^BB^%^E7^%^BB^%^9F"
+```
+```bash
+# 结果
+curl --location --request GET 'http://47.100.51.234:5000?title=%E4%B8%93%E8%AE%BF%E9%AC%BC%E6%B3%A3%E6%89%8B%E6%B8%B8%E5%88%B6%E4%BD%9C%E4%BA%BA%EF%BC%9A%E4%B8%8B%E6%AC%A1%E6%B5%8B%E8%AF%95%E8%A6%81%E5%A4%A7%E5%B9%85%E5%88%A0%E5%87%8F%E4%BB%98%E8%B4%B9%E7%B3%BB%E7%BB%9F'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    95  100    95    0     0    304      0 --:--:-- --:--:-- --:--:--   304
+{"id": 1, "result": [{"pred_label": ["游戏"], "score": [0.9976707100868225]}], "status": 200}
+```
+
+## 以下为原仓库README
+---
+---
 # BERT
 
 **\*\*\*\*\* New March 11th, 2020: Smaller BERT Models \*\*\*\*\***
